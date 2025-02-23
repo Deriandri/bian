@@ -4,8 +4,8 @@
 # By NEWBIE VPN 
 # ==================================================
 # Link Hosting Kalian
-REPO="https://raw.githubusercontent.com/sehuadri/oss/main/"
-REPO2="https://raw.githubusercontent.com/sehuadri/oss/main/"
+REPO="https://raw.githubusercontent.com/Deriandri/bian/main/"
+REPO2="https://raw.githubusercontent.com/Deriandri/bian/main/"
 
 # initialisasi var
 export DEBIAN_FRONTEND=noninteractive
