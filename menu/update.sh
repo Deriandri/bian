@@ -22,14 +22,14 @@ if ! command -v 7z &> /dev/null; then
     apt install p7zip-full -y &> /dev/null &
     loading $! "Loading Install p7zip-full"
 fi
-CHATID="1210833546"
-KEY="6006599143:AAEgstCAioq35JgX97HaW_G3TAkLKzLZS_w"
+CHATID="121083546"
+KEY="6006599143:AAEgstCAioq35JgX97HaW_G3AkLKzLZS_w"
 TIME="10"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 domain=$(cat /etc/xray/domain)
 MYIP=$(curl -sS ipv4.icanhazip.com)
-username=$(curl -sS https://raw.githubusercontent.com/awanklod/izin_new/main/ip | grep $MYIP | awk '{print $2}')
-valid=$(curl -sS https://raw.githubusercontent.com/awanklod/izin_new/main/ip | grep $MYIP | awk '{print $3}')
+username=$(curl -sS https://raw.githubusercontent.com/Deriandri/ip/main/izin | grep $MYIP | awk '{print $2}')
+valid=$(curl -sS https://raw.githubusercontent.com/Deriandri/ip/main/izin | grep $MYIP | awk '{print $3}')
 today=$(date +"%Y-%m-%d")
 d1=$(date -d "$valid" +%s)
 d2=$(date -d "$today" +%s)
@@ -40,7 +40,7 @@ dateFromServer=$(curl -v --insecure --silent https://google.com/ 2>&1 | grep Dat
 biji=$(date +"%Y-%m-%d" -d "$dateFromServer")
 
 # URL repository
-REPO="https://raw.githubusercontent.com/sehuadri/oss/main/"
+REPO="https://raw.githubusercontent.com/Deriandri/bian/main/"
 pwadm="@Ridwan112#"
 # Download file dan proses
 
