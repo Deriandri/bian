@@ -1,6 +1,6 @@
 #!/bin/bash
-REPO="https://raw.githubusercontent.com/sehuadri/oss/main/"
-REPO2="https://raw.githubusercontent.com/sehuadri/oss/main/"
+REPO="https://raw.githubusercontent.com/Deriandri/bian/main/"
+REPO2="https://raw.githubusercontent.com/Deriandri/bian/main/"
 wget -q -O /usr/bin/limit-ip "${REPO}install/limit-ip"
 chmod +x /usr/bin/*
 cd /usr/bin
