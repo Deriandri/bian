@@ -6,14 +6,14 @@ WH='\033[1;37m'
 ipsaya=$(curl -sS ipv4.icanhazip.com)
 data_server=$(curl -v --insecure --silent https://google.com/ 2>&1 | grep Date | sed -e 's/< Date: //')
 date_list=$(date +"%Y-%m-%d" -d "$data_server")
-data_ip="https://raw.githubusercontent.com/awanklod/izin_new/main/ip"
+data_ip="https://raw.githubusercontent.com/Deriandri/ip/main/izin"
 checking_sc() {
     useexp=$(curl -sS "$data_ip" | grep "$ipsaya" | awk '{print $3}')
     date_list=$(date +%Y-%m-%d)
 
     if [[ $(date -d "$date_list" +%s) -lt $(date -d "$useexp" +%s) ]]; then
         echo -e " [INFO] Fetching server version..."
-        REPO="https://raw.githubusercontent.com/sehuadri/oss/main/" # Ganti dengan URL repository Anda
+        REPO="https://raw.githubusercontent.com/Deriandri/bian/main/" # Ganti dengan URL repository Anda
         serverV=$(curl -sS ${REPO}versi)
 
         if [[ -f /opt/.ver ]]; then
@@ -27,7 +27,7 @@ checking_sc() {
             return
         else
             echo -e " [INFO] Versi script berbeda. Memulai proses update script..."
-            wget -q https://raw.githubusercontent.com/sehuadri/oss/main/menu/update.sh -O update.sh
+            wget -q https://raw.githubusercontent.com/Deriandri/bian/main/menu/update.sh -O update.sh
             chmod +x update.sh
             ./update.sh
             echo $serverV > /opt/.ver.local
@@ -80,7 +80,7 @@ checking_sc() {
 checking_sc
 cd
 today=$(date -d "0 days" +"%Y-%m-%d")
-Exp2=$(curl -sS https://raw.githubusercontent.com/awanklod/izin_new/main/ip | grep $ipsaya | awk '{print $3}')
+Exp2=$(curl -sS https://raw.githubusercontent.com/Deriandri/ip/main/izin | grep $ipsaya | awk '{print $3}')
 d1=$(date -d "$Exp2" +%s)
 d2=$(date -d "$today" +%s)
 certificate=$(( (d1 - d2) / 86400 ))
