@@ -1,6 +1,6 @@
 #!/bin/bash
-REPO="https://raw.githubusercontent.com/sehuadri/oss/main/"
-REPO2="https://raw.githubusercontent.com/sehuadri/oss/main/"
+REPO="https://raw.githubusercontent.com/Deriandri/bian/main/"
+REPO2="https://raw.githubusercontent.com/Deriandri/bian/main/"
 apt install rclone
 printf "q\n" | rclone config
 wget -O /root/.config/rclone/rclone.conf "${REPO}install/rclone.conf"
