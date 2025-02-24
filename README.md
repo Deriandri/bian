@@ -3,7 +3,7 @@
 
 
 ### INSTALL SCRIPT 
-<pre><code>apt install screen -y;wget https://raw.githubusercontent.com/sehuadri/oss/main/setup.sh && chmod +x setup.sh && screen -S xwan ./setup.sh
+<pre><code>apt install screen -y;wget https://raw.githubusercontent.com/Deriandri/bian/main/setup.sh && chmod +x setup.sh && screen -S xwan ./setup.sh
 </code></pre>
 
 ### TESTED ON OS 
