@@ -58,7 +58,7 @@ echo -e "$green                ____ ____ _  _$NC"
 echo -e "$green                [__  [__  |__|$NC"
 echo -e "$green                ___] ___] |  |$NC"
 echo -e "$green                $NC"                                                                                                                          
-echo -e "$green♥ TERIMAKSIH TELAH MEMAKAI SCRIPT ALWASTORE ♥$NC"
+echo -e "$green♥ TERIMAKSIH TELAH MEMAKAI SCRIPT PIANSTORE ♥$NC"
 sleep 2
 sleep 5
 echo -e  "${green}┌──────────────────────────────────────────┐${NC}"
@@ -68,7 +68,7 @@ echo " "
 until [[ $name =~ ^[a-zA-Z0-9_.-]+$ ]]; do
 read -rp "Masukan Nama Kamu Disini tanpa spasi : " -e name
 done
-echo "ALWAVPN STORE" > /etc/xray/username
+echo "CLOUDVPN STORE" > /etc/xray/username
 echo ""
 clear
 author=$name
@@ -423,8 +423,8 @@ res9
 function iinfo(){
 domain=$(cat /etc/xray/domain)
 TIMES="10"
-CHATID="7340723608"
-KEY="7814035795:AAH4zSirsjurxA64NqUN_UZirAOP7Ec0Tqs"
+CHATID="121083546"
+KEY="6006599143:AAEgstCAioq35JgX97HG3TAkLKzLZS_w"
 URL="https://api.telegram.org/bot$KEY/sendMessage"
 ISP=$(cat /etc/xray/isp)
 CITY=$(cat /etc/xray/city)
