@@ -5,7 +5,7 @@ file_path="/etc/handeling"
 # Cek apakah file ada
 if [ ! -f "$file_path" ]; then
     # Jika file tidak ada, buat file dan isi dengan dua baris
-    echo -e "ALWAVPN PREMIUM SERVER\nYELLOW" | sudo tee "$file_path" > /dev/null
+    echo -e "cloudvpn premium server\nBLUE" | sudo tee "$file_path" > /dev/null
     echo "File '$file_path' berhasil dibuat."
 else
     # Jika file ada, cek apakah isinya kosong
@@ -75,4 +75,3 @@ END
 systemctl daemon-reload
 systemctl enable ws-ovpn
 systemctl restart ws-ovpn
-
