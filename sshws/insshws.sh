@@ -11,7 +11,7 @@ else
     # Jika file ada, cek apakah isinya kosong
     if [ ! -s "$file_path" ]; then
         # Jika file ada tetapi kosong, isi dengan dua baris
-        echo -e "CLOUDVPN SEREVR PREMIUM\nCyan" | sudo tee "$file_path" > /dev/null
+        echo -e "SURYAF_ALW ID SERVER \nCyan" | sudo tee "$file_path" > /dev/null
         echo "File '$file_path' kosong dan telah diisi."
     else
         # Jika file ada dan berisi data, tidak lakukan apapun
