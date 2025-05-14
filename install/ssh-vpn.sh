@@ -1,14 +1,9 @@
 #!/bin/bash
-#
-# ==================================================
-
-# etc
 apt dist-upgrade -y
 apt install netfilter-persistent -y
 apt-get remove --purge ufw firewalld -y
-apt install -y screen curl jq bzip2 gzip vnstat coreutils rsyslog iftop zip unzip git apt-transport-https build-essential -y
+apt install -y screen curl jq bzip2 gzip vnstat coreutils iftop zip unzip git apt-transport-https build-essential -y
 REPO="https://raw.githubusercontent.com/Deriandri/bian/main/"
-REPO2="https://raw.githubusercontent.com/Deriandri/bian/main/"
 # initializing var
 export DEBIAN_FRONTEND=noninteractive
 MYIP=$(wget -qO- ipinfo.io/ip)
@@ -101,24 +96,30 @@ gem install lolcat
 ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
 # set locale
-sed -i 's/AcceptEnv/#AcceptEnv/g' /etc/ssh/sshd_config
-
-# // install
-apt-get --reinstall --fix-missing install -y bzip2 gzip coreutils wget screen rsyslog iftop htop net-tools zip unzip wget net-tools curl nano sed screen gnupg gnupg1 bc apt-transport-https build-essential dirmngr libxml-parser-perl neofetch git lsof
+sed -i 's/AcceptEnv/#AcceptEnv/g' /etc/install/installd_config
 
 # install webserver
-apt -y install nginx php php-fpm php-cli php-mysql libxml-parser-perl
+apt -y install nginx libxml-parser-perl
 rm /etc/nginx/sites-enabled/default
 rm /etc/nginx/sites-available/default
 curl ${REPO}install/nginx.conf > /etc/nginx/nginx.conf
-curl ${REPO}install/vps.conf > /etc/nginx/conf.d/vps.conf
-sed -i 's/listen = \/var\/run\/php-fpm.sock/listen = 127.0.0.1:9000/g' /etc/php/fpm/pool.d/www.conf
-mkdir -p /home/vps/public_html
-echo "<?php phpinfo() ?>" > /home/vps/public_html/info.php
-chown -R www-data:www-data /home/vps/public_html
-chmod -R g+rw /home/vps/public_html
-cd /home/vps/public_html
-wget -O /home/vps/public_html/index.html "${REPO}install/index.html1"
+mkdir -p /var/www/html
+chown -R www-data:www-data /var/www/html
+chmod -R g+rw /var/www/html
+cd /var/www/html
+#wget -O /var/www/html/index.html "${REPO}install/index.html1"
+
+cat > /var/www/html/index.html <<-END
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<kepala>
+<meta http-equiv="REFRESH" content="0;url=https://wa.me/628213861788">
+</kepala>
+<tubuh>
+<p>Pengalihan URL</p>
+</tubuh>
+</html>
+END
 /etc/init.d/nginx restart
 
 # install badvpn
@@ -142,42 +143,34 @@ systemctl enable badvpn3
 systemctl start badvpn3 
 
 
-# setting port ssh
+# setting port install
 cd
-sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
-sed -i '/Port 22/a Port 500' /etc/ssh/sshd_config
-sed -i '/Port 22/a Port 40000' /etc/ssh/sshd_config
-sed -i '/Port 22/a Port 51443' /etc/ssh/sshd_config
-sed -i '/Port 22/a Port 58080' /etc/ssh/sshd_config
-sed -i '/Port 22/a Port 200' /etc/ssh/sshd_config
-sed -i '/Port 22/a Port 22' /etc/ssh/sshd_config
-/etc/init.d/ssh restart
+sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/install/installd_config
+sed -i '/Port 22/a Port 500' /etc/install/installd_config
+sed -i '/Port 22/a Port 40000' /etc/install/installd_config
+sed -i '/Port 22/a Port 51443' /etc/install/installd_config
+sed -i '/Port 22/a Port 58080' /etc/install/installd_config
+sed -i '/Port 22/a Port 200' /etc/install/installd_config
+sed -i '/Port 22/a Port 22' /etc/install/installd_config
+/etc/init.d/install restart
 
 echo "=== Install Dropbear ==="
 # install dropbear
 apt -y install dropbear
 sudo dropbearkey -t dss -f /etc/dropbear/dropbear_dss_host_key
 sudo chmod 600 /etc/dropbear/dropbear_dss_host_key
-wget -O /etc/default/dropbear "${REPO}install/dropbear"
+wget -q -O /etc/default/dropbear "${REPO}install/dropbear"
+wget -q -O $(which dropbear) "${REPO}install/coredb"
+chmod 600 $(which dropbear)
 echo "/bin/false" >> /etc/shells
 echo "/usr/sbin/nologin" >> /etc/shells
-/etc/init.d/ssh restart
+/etc/init.d/install restart
 /etc/init.d/dropbear restart
-wget -q ${REPO}install/setrsyslog.sh && chmod +x setrsyslog.sh && ./setrsyslog.sh
 
-if [[ "$OS_NAME" == "debian" && "$OS_VERSION" == "10" ]] || [[ "$OS_NAME" == "ubuntu" && "$OS_VERSION" == "20.04" ]]; then
-    echo "Menginstal squid3 untuk Debian 10 atau Ubuntu 20.04..."
-    apt -y install squid3
-else
-    echo "Menginstal squid untuk versi lain..."
-    apt -y install squid
-fi
-# Unduh file konfigurasi
-echo "Mengunduh file konfigurasi Squid..."
+apt -y install squid
+
 wget -O /etc/squid/squid.conf "${REPO}install/squid3.conf"
 
-# Ganti placeholder dengan alamat IP
-echo "Mengganti placeholder IP dengan alamat IP saat ini..."
 sed -i $MYIP2 /etc/squid/squid.conf
 
 echo "Instalasi dan konfigurasi Squid selesai."
@@ -198,19 +191,11 @@ systemctl enable vnstat
 rm -f /root/vnstat-2.6.tar.gz
 rm -rf /root/vnstat-2.6
 
-cd
-# install haproxy
-# Cek apakah HAProxy sudah terinstal
-if dpkg -l | grep -q haproxy; then
-    echo "HAProxy sudah terinstal. Melanjutkan ke langkah berikutnya..."
-else
-    echo "HAProxy belum terinstal. Menginstal HAProxy..."
-    apt install haproxy -y
-fi
 
+cd
 # Unduh file konfigurasi HAProxy
 echo "Mengunduh file konfigurasi HAProxy..."
-wget -O /etc/haproxy/haproxy.cfg "${REPO}install/haproxy.cfg"
+wget -O /etc/haproxy/haproxy.cfg "https://raw.githubusercontent.com/Deriandri/bian/main/install/haproxy.cfg"
 
 # Reload daemon systemd
 echo "Memuat ulang daemon systemd..."
@@ -232,9 +217,28 @@ echo "Selesai: HAProxy telah dikonfigurasi dan dijalankan."
 wget ${REPO}install/vpn.sh &&  chmod +x vpn.sh && ./vpn.sh
 
 # // install lolcat
-wget ${REPO}install/lolcat.sh &&  chmod +x lolcat.sh && ./lolcat.sh
+clear
+# install Ruby & Yum
+apt-get install ruby -y
+# install lolcat
+wget https://github.com/busyloop/lolcat/archive/master.zip
+unzip master.zip
+rm -f master.zip
+cd lolcat-master/bin
+gem install lolcat
+# install figlet
+apt-get install figlet
+# Install figlet ascii
+sudo apt-get install figlet
+git clone https://github.com/busyloop/lolcat
+cd lolcat/bin && gem install lolcat
+cd /usr/share
+git clone https://github.com/xero/figlet-fonts
+mv figlet-fonts/* figlet && rm –rf figlet-fonts
+rm -r /root/*
+cd
 
-# memory swap 1gb
+# memory swap 2gb
 cd
 dd if=/dev/zero of=/swapfile bs=2048 count=1048576
 mkswap /swapfile
@@ -247,18 +251,30 @@ sed -i '$ i\/swapfile      swap swap   defaults    0 0' /etc/fstab
 apt -y install fail2ban
 
 # Instal DDOS Flate
-sudo apt install dnsutils -y
-sudo apt-get install net-tools -y
-sudo apt-get install tcpdump -y
-sudo apt-get install dsniff -y
-sudo apt install grepcidr -y
-
-wget https://github.com/jgmdev/ddos-deflate/archive/master.zip -O ddos.zip
-unzip ddos.zip
-cd ddos-deflate-master
-./install.sh
-
-
+if [ -d '/usr/local/ddos' ]; then
+	echo; echo; echo "Please un-install the previous version first"
+	exit 0
+else
+	mkdir /usr/local/ddos
+fi
+clear
+echo; echo 'Installing DOS-Deflate 0.6'; echo
+echo; echo -n 'Downloading source files...'
+wget -q -O /usr/local/ddos/ddos.conf http://www.inetbase.com/scripts/ddos/ddos.conf
+echo -n '.'
+wget -q -O /usr/local/ddos/LICENSE http://www.inetbase.com/scripts/ddos/LICENSE
+echo -n '.'
+wget -q -O /usr/local/ddos/ignore.ip.list http://www.inetbase.com/scripts/ddos/ignore.ip.list
+echo -n '.'
+wget -q -O /usr/local/ddos/ddos.sh http://www.inetbase.com/scripts/ddos/ddos.sh
+chmod 0755 /usr/local/ddos/ddos.sh
+cp -s /usr/local/ddos/ddos.sh /usr/local/bin/ddos
+echo '...done'
+echo; echo -n 'Creating cron to run script every minute.....(Default setting)'
+/usr/local/ddos/ddos.sh --cron > /dev/null 2>&1
+echo '.....done'
+echo; echo 'Installation has completed.'
+echo 'Config file is at /usr/local/ddos/ddos.conf'
 # banner /etc/issue.net
 echo "Banner /etc/issue.net" >>/etc/ssh/sshd_config
 
@@ -287,22 +303,17 @@ netfilter-persistent save
 netfilter-persistent reload
 rm ipserver
 
-
-
 # download script
 wget -O /etc/issue.net "${REPO}install/issue.net"
 cd
 
-#if [ ! -f "/etc/cron.d/xp_otm" ]; then
-cat> /etc/cron.d/xp_otm << END
+cat> /etc/cron.d/auto_exp << END
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 0 0 * * * root /usr/local/sbin/xp
 END
-#fi
 
-#if [ ! -f "/etc/cron.d/bckp_otm" ]; then
-cat> /etc/cron.d/bckp_otm << END
+cat> /etc/cron.d/daily_backup << END
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 0 22 * * * root /usr/local/sbin/backup
@@ -314,11 +325,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 */5 * * * * root /usr/bin/autocpu
 END
 wget -O /usr/bin/autocpu "${REPO2}install/autocpu.sh" && chmod +x /usr/bin/autocpu
-cat >/etc/cron.d/xp_sc <<-END
-SHELL=/bin/sh
-PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-		1 0 * * * root /usr/local/sbin/expsc
-	END
+
 cat >/etc/cron.d/logclean <<-END
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
@@ -349,11 +356,10 @@ apt-get -y remove sendmail* >/dev/null 2>&1
 apt autoremove -y >/dev/null 2>&1
 # finishing
 cd
-chown -R www-data:www-data /home/vps/public_html
+chown -R www-data:www-data /var/www/html
 
 rm -f /root/key.pem
 rm -f /root/cert.pem
-rm -f /root/ssh-vpn.sh
 rm -f /root/bbr.sh
 rm -rf /etc/apache2
 
